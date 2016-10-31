@@ -7,6 +7,16 @@ class SysAdminController {
   DataSource dataSource
   
   def index() {
+  }
+
+  def sudo() {
+    if(params.sudo && params.long('otherUser')) {
+      Employee employee = Employee.get(params.long('otherUser'))
+      if(employee) {
+        session.setAttribute('uid', employee.uid)
+        return redirect(controller: 'dashboard', action: 'index')
+      }
+    }
     List<Expando> recentUsers = []
     Sql sql = null
     try {
@@ -26,9 +36,7 @@ class SysAdminController {
       }
     }
     [recentUsers: recentUsers]
-  }
-
-  def sudo() {
+    /*
     if(!params.long('otherUser')) {
       flash.message = "No user provided!"
       log.error "No user Provided"
@@ -42,5 +50,6 @@ class SysAdminController {
     }
     session.setAttribute('uid', employee.uid)
     return redirect (controller: 'dashboard', action: 'index')
+    */
   }
 }

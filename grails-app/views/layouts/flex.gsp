@@ -34,6 +34,15 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Funktioner <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://www.su.se/" title="su.se">Stockholms Universitet</a></li>
+                  <li><a href="https://hr.su.se/" title="primula">Primula</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><g:link controller="sysAdmin" action="sudo" title="SuDo">Sudo</g:link></li>
+                </ul>
+              </li>
+              <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Andra System <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="http://www.su.se/" title="su.se">Stockholms Universitet</a></li>
