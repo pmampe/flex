@@ -52,6 +52,9 @@
                 </ul>
               </li>
             </ul>
+            <div class="pull-right">
+              <p>${session.uid} / ${session.role}</p><g:if test="${session.realuser}">(${session.realuser} / ${session.realrole})<p></p></g:if>
+            </div>
           </div><!--/.nav-collapse -->
         </div>
       </nav>

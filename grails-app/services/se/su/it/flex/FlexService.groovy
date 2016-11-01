@@ -3,12 +3,16 @@ package se.su.it.flex
 import grails.transaction.Transactional
 import javax.sql.DataSource
 import groovy.sql.Sql
+import groovy.transform.CompileStatic
 
 @Transactional
+@CompileStatic
 class FlexService {
   DataSource dataSource
+  
   @Transactional(readOnly = true)
   public int getAggregatedDeltaForUser(String uid) {
+    log.error "getAggregatedDeltaForUser(${uid})"
     Sql sql = null
     int flexsaldo = 0
     try {
