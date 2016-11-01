@@ -18,7 +18,7 @@
           <thead><tr><th>Datum</th><th>Start</th><th>End</th><th>Length</th><th>Description</th></tr></thead>
           <tbody>
               <g:each in="${entries}" var="entry">
-                <tr><td>${entry.workDate.format('yyyy-MM-dd')}</td><td>${entry.mandatoryStart}</td><td>${entry.mandatoryEnd}</td><td>${entry.fullTime}</td><td>${entry.description}</td></tr>
+                <tr><td><g:link action="edit" id="${entry.id}" title="Editera">${entry.workDate.format('yyyy-MM-dd')}</g:link></td><td>${entry.mandatoryStart}</td><td>${entry.mandatoryEnd}</td><td>${entry.fullTime}</td><td>${entry.description}</td></tr>
               </g:each>
           </tbody>
         </table>

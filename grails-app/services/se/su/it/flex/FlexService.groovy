@@ -1,6 +1,7 @@
 package se.su.it.flex
 
 import grails.transaction.Transactional
+import grails.transaction.NotTransactional
 import javax.sql.DataSource
 import groovy.sql.Sql
 
@@ -124,5 +125,20 @@ class FlexService {
       }
     }
     return flexsaldo
+  }
+
+  @NotTransactional
+  public String getWeekDay(Date date) {
+    java.util.Calendar inst = java.util.Calendar.getInstance()
+    inst.setTime(date)
+    Map<Integer, String> weekDays = [:]
+    weekDays.put(java.util.Calendar.MONDAY, "Måndag")
+    weekDays.put(java.util.Calendar.TUESDAY, "Tisdag")
+    weekDays.put(java.util.Calendar.WEDNESDAY, "Onsdag")
+    weekDays.put(java.util.Calendar.THURSDAY, "Torsdag")
+    weekDays.put(java.util.Calendar.FRIDAY, "Fredag")
+    weekDays.put(java.util.Calendar.SATURDAY, "Lördag")
+    weekDays.put(java.util.Calendar.SUNDAY, "Söndag")
+    return weekDays.get(inst.get(java.util.Calendar.DAY_OF_WEEK))
   }
 }
