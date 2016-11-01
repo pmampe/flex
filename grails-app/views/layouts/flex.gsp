@@ -36,8 +36,7 @@
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Funktioner <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a href="http://www.su.se/" title="su.se">Stockholms Universitet</a></li>
-                  <li><a href="https://hr.su.se/" title="primula">Primula</a></li>
+                  <li><g:link controller="date" action="list" title="View Calendar">Calendar</g:link></li>
                   <li role="separator" class="divider"></li>
                   <li><g:link controller="sysAdmin" action="sudo" title="SuDo">Sudo</g:link></li>
                 </ul>
