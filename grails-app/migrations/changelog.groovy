@@ -236,6 +236,14 @@ databaseChangeLog = {
         constraints(nullable: "false")
       }
 
+      column(name: "start_date", type: "datetime") {
+        constraints(nullable: "false")
+      }
+
+      column(name: "end_date", type: "datetime") {
+        constraints(nullable: "false")
+      }
+
       column(name: "employee_id", type: "bigint") {
         constraints(nullable: "false")
       }

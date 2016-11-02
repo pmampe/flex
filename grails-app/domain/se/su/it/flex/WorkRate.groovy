@@ -4,6 +4,7 @@ class WorkRate {
   String comment
   Date dateCreated
   Date endDate
+  Employee employee
   Date lastUpdated
   Date startDate
   int rate = 0
@@ -16,6 +17,7 @@ class WorkRate {
   static constraints = {
     comment(nullable: true, blank: true)
     dateCreated(nullable: false)
+    employee(nullable: false)
     endDate(nullable: false)
     lastUpdated(nullable: false)
     startDate(nullable: false)

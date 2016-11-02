@@ -2,13 +2,13 @@
 <html>
   <head>
     <meta name="layout" content="flex"/>
-    <title>List Absence</title>
+    <title>List WorkRate</title>
   </head>
   <body>
     <div class="container">
       <g:render template="basics"/>
 
-      <g:form name="listform" action="listAbsence" class="form-horizontal">
+      <g:form name="listform" action="listWorkRate" class="form-horizontal">
         <div class="form-group">
           <label for="maxsize" class="control-label">Max # of Hits</label>
           <g:select name="maxsize" from="${maxSizes}" class="form-control" value="${max}"/>
@@ -31,10 +31,10 @@
 
       <g:if test="${entries}">
         <table class="table table-condensed table-hover table-bordered table-striped">
-          <thead><tr><th>Date</th><th>UID</th><th>Start</th><th>Length</th><th>Comment</th></tr></thead>
+          <thead><tr><th>Uid</th><th>StartDate</th><th>Last Date</th><th>Rate</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Comment</th></tr></thead>
           <tbody>
             <g:each in="${entries}" var="entry">
-              <tr><td><g:formatDate format="yyyy-MM-dd" date="${entry.calendar.workDate}"/></td><td>${entry.employee.uid}</td><td><g:formatNumber number="${(int)(entry.start/60)}" type="number" minIntegerDigits="2" />:<g:formatNumber number="${entry.start%60}" type="number" minIntegerDigits="2" /></td><td><g:formatNumber number="${(int)(entry.length/60)}" type="number" minIntegerDigits="2" />:<g:formatNumber number="${entry.length%60}" type="number" minIntegerDigits="2" /></td><td>${entry.comment}</td></tr>
+              <tr><td>${entry.employee.uid}</td><td><g:formatDate date="${entry.startDate}" format="yyyy-MM-dd"/></td><td><g:formatDate date="${entry.endDate}" format="yyyy-MM-dd"/></td><td>${entry.rate/100}</td><td>${entry.rateMonday/100}</td><td>${entry.rateTuesday/100}</td><td>${entry.rateWednesday/100}</td><td>${entry.rateThursday/100}</td><td>${entry.rateFriday/100}</td><td>${entry.comment}</td></tr>
             </g:each>
           </tbody>
         </table>
