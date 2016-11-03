@@ -6,8 +6,11 @@ class DashboardController {
   def index() {
     Employee employee = (session.getAttribute('uid')) ? Employee.findByUid(session.getAttribute('uid') as String) : null
     int dailyDelta = (session.getAttribute('uid')) ? flexService.getAggregatedDeltaForUser(session.getAttribute('uid') as String) : 0
-    List<ReportedTime> reportedTimes = (employee) ? ReportedTime.findAllByEmployee(employee, [max: 25, sort: 'calendar.workDate', order: 'desc']) : []
-    [dailyDelta: dailyDelta, employee: employee, reportedTimes: reportedTimes]
+    List<Absence> absences = (employee) ? Absence.findAllByEmployee(employee, [sort: 'calendar.workDate', order: 'desc']) : []
+    List<ReportedTime> reportedTimes = (employee) ? ReportedTime.findAllByEmployee(employee, [max: 50, sort: 'calendar.workDate', order: 'desc']) : []
+    List<TimeAdjustment> timeAdjustments = (employee) ? TimeAdjustment.findAllByEmployee(employee, [sort: 'calendar.workDate', order: 'desc']) : []
+    List<WorkRate> workRates = (employee) ? WorkRate.findAllByEmployee(employee, [sort: 'startDate', order: 'desc']) : []
+    [absences: absences, dailyDelta: dailyDelta, employee: employee, reportedTimes: reportedTimes, timeAdjustments: timeAdjustments, workRates: workRates]
   }
 
   def show() {

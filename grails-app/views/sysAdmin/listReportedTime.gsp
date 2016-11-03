@@ -31,10 +31,10 @@
 
       <g:if test="${entries}">
         <table class="table table-condensed table-hover table-bordered table-striped">
-          <thead><tr><th>WorkDate</th><th>UID</th><th>Start</th><th>End</th><th>Lunch</th><th>Delta</th><th>Total</th><th>Comment</th></tr></thead>
+          <thead><tr><th>WorkDate</th><th>UID</th><th>Start</th><th>End</th><th>Lunch</th><th>Delta</th><th>Total</th><th>All Day</th><th>Comment</th></tr></thead>
           <tbody>
             <g:each in="${entries}" var="entry">
-              <tr><td><g:formatDate date="${entry.calendar.workDate}" format="yyyy-MM-dd"/></td><td><g:link action="sudo" id="${entry.employee.id}" title="Sudo">${entry.employee.uid}</g:link></td><td><g:formatNumber number="${entry.startHour}" type="number" minIntegerDigits="2" />:<g:formatNumber number="${entry.startMinute}" type="number" minIntegerDigits="2" /></td><td><g:formatNumber number="${entry.endHour}" type="number" minIntegerDigits="2" />:<g:formatNumber number="${entry.endMinute}" type="number" minIntegerDigits="2" /></td><td>${entry.lunchLength}</td><td>${entry.dailyDelta}</td><td><g:formatNumber number="${(int)(Math.abs(entry.dailyTotal/60))}" type="number" minIntegerDigits="2" />:<g:formatNumber number="${Math.abs(entry.dailyTotal)%60}" type="number" minIntegerDigits="2" /></td><td>${entry.comment}</td></tr>
+              <tr><td><g:formatDate date="${entry.calendar.workDate}" format="yyyy-MM-dd"/></td><td><g:link action="sudo" id="${entry.employee.id}" title="Sudo">${entry.employee.uid}</g:link></td><td><g:formatNumber number="${(int)(entry.startMinute/60)}" type="number" minIntegerDigits="2" />:<g:formatNumber number="${entry.startMinute%60}" type="number" minIntegerDigits="2" /></td><td><g:formatNumber number="${(int)(entry.endMinute/60)}" type="number" minIntegerDigits="2" />:<g:formatNumber number="${entry.endMinute%60}" type="number" minIntegerDigits="2" /></td><td>${entry.lunchLength}</td><td>${entry.dailyDelta}</td><td><g:formatNumber number="${(int)(Math.abs(entry.dailyTotal/60))}" type="number" minIntegerDigits="2" />:<g:formatNumber number="${Math.abs(entry.dailyTotal)%60}" type="number" minIntegerDigits="2" /></td><td><g:formatBoolean boolean="${entry.absentAllDay}" true="Ja" false="Nej"/></td><td>${entry.comment}</td></tr>
             </g:each>
           </tbody>
         </table>

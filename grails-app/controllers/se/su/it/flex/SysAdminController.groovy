@@ -38,7 +38,7 @@ class SysAdminController {
 
   def listReportedTime() {
     List<Integer> maxSizes = [25, 100, 250, 1000, 2500, 10000]
-    List<String> sortables = ["absentAllDay", "calendar.workDate", "comment", "dailyDelta", "dailyTotal", "employee.uid", "lunchLength"]
+    List<String> sortables = ["absentAllDay", "calendar.workDate", "comment", "dailyDelta", "dailyTotal", "employee.uid", "endMinute", "lunchLength", "startMinute"]
     List<String> sortOrders = ["asc", "desc"]
     int max = (params.int('maxsize')) ?: 100
     String sort = (params.sortby?.trim()) ?: "calendar.workDate"

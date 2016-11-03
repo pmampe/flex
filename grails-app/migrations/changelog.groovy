@@ -108,15 +108,7 @@ databaseChangeLog = {
         constraints(nullable: "true")
       }
 
-      column(name: "end_hour", type: "integer") {
-        constraints(nullable: "false", default: 0)
-      }
-
       column(name: "end_minute", type: "integer") {
-        constraints(nullable: "false", default: 0)
-      }
-
-      column(name: "start_hour", type: "integer") {
         constraints(nullable: "false", default: 0)
       }
 

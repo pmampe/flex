@@ -9,11 +9,9 @@ class ReportedTime {
   Date lastUpdated
   int dailyDelta = 0
   int dailyTotal = 0
-  int endHour = 0
-  int endMinute = 0
+  int endMinute = 0 // minute within day -> 60 * h + m
   int lunchLength = 30
-  int startHour = 0
-  int startMinute = 0
+  int startMinute = 0 // minute within day -> 60 * h + m
 
   static constraints = {
     comment(nullable: true, blank: true, maxSize: 128)
