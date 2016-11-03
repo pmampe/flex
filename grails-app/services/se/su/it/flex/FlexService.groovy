@@ -56,6 +56,26 @@ class FlexService {
         cal.save(flush: true)
       }
     }
+    Calendar.findAllByWorkDateLike('%%-01-01').each { Calendar c ->
+      c.description = 'Nyårsdagen'
+      c.save(flush: true)
+    }
+    Calendar.findAllByWorkDateLike('%%-12-24').each { Calendar c ->
+      c.description = 'Julafton'
+      c.save(flush: true)
+    }
+    Calendar.findAllByWorkDateLike('%%-12-25').each { Calendar c ->
+      c.description = 'Juldagen'
+      c.save(flush: true)
+    }
+    Calendar.findAllByWorkDateLike('%%-12-26').each { Calendar c ->
+      c.description = 'Annandag jul'
+      c.save(flush: true)
+    }
+    Calendar.findAllByWorkDateLike('%%-12-31').each { Calendar c ->
+      c.description = 'Nyårsafton'
+      c.save(flush: true)
+    }
   }
 
   @Transactional(readOnly = true)
@@ -125,6 +145,60 @@ class FlexService {
       }
     }
     return flexsaldo
+  }
+  
+  @Transactional(readOnly = true)
+  public int getAggregatedTimeAdjustmentsForUser(String uid) {
+    Sql sql = null
+    int flexsaldo = 0
+    try {
+      sql = new Sql(dataSource)
+      sql.rows([uid: uid],"select sum(t.delta) as saldo from time_adjustment t inner join employee e on e.id=t.employee_id where e.uid=:uid;").each { row ->
+        flexsaldo = row['saldo'] as int
+      }
+    } catch(Throwable exception) {
+      log.error "Some problems: ${exception.getMessage()}"
+    } finally {
+      if(null!=sql) {
+        try {
+          sql.close()
+        } catch(Throwable exception) {
+        }
+        sql = null
+      }
+    }
+    return flexsaldo
+  }
+
+  @Transactional(readOnly=true)
+  public int getNormTimeForEmployeeAndDate(Employee employee, Calendar calendar) {
+    int normTime = (calendar?.fullTime) ?:  0
+    if(employee && calendar && normTime>0) {
+      WorkRate workRate = WorkRate.findByEmployeeAndStartDateLessThanEqualsAndEndDateGreaterThanEquals(employee, calendar.workDate, calendar.workDate, [max: 1])
+      if(workRate) {
+        int r = 0
+        if(workRate.rate > 0) {
+          r = workRate.rate
+        } else {
+          java.util.Calendar c = java.util.Calendar.getInstance()
+          c.setTime(calendar.workDate)
+          int dow =c.get(java.util.Calendar.DAY_OF_WEEK)
+          if(dow==java.util.Calendar.MONDAY) {
+            r = workRate.rateMonday
+          } else if(dow==java.util.Calendar.TUESDAY) {
+            r = workRate.rateTuesday
+          } else if(dow==java.util.Calendar.WEDNESDAY) {
+            r = workRate.rateWednesday
+          } else if(dow==java.util.Calendar.THURSDAY) {
+            r = workRate.rateThursday
+          } else if(dow==java.util.Calendar.FRIDAY) {
+            r = workRate.rateFriday
+          }
+        }
+        normTime = (rate * normTime) / 10000
+      }
+    }
+    return normTime
   }
 
   @NotTransactional
