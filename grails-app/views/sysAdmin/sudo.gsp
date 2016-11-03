@@ -10,8 +10,8 @@
       <g:if test="${recentUsers}">
         <g:form name="sudoform" action="sudo" class="form-horizontal">
           <div class="form-group">
-            <label for="otherUser" class="control-label">User</label>
-            <g:select name="otherUser" from="${recentUsers}" class="form-control" optionKey="id" noSelection="['':'Choose user']"/>
+            <label for="id" class="control-label">User</label>
+            <g:select name="id" from="${recentUsers}" class="form-control" optionKey="id" noSelection="['':'Choose user']"/>
           </div>
           <div class="form-group">
             <label for="role" class="control-label">Role</label>

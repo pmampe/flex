@@ -34,7 +34,7 @@
           <thead><tr><th>Date</th><th>UID</th><th>Delta</th><th>Comment</th></tr></thead>
           <tbody>
             <g:each in="${entries}" var="entry">
-              <tr><td><g:formatDate format="yyyy-MM-dd" date="${entry.calendar.workDate}"/></td><td>${entry.employee.uid}</td><td>${(entry.delta<0) ? '-':'+'}<g:formatNumber number="${(int)(Math.abs(entry.delta/60))}" type="number" minIntegerDigits="2" />:<g:formatNumber number="${Math.abs(entry.delta)%60}" type="number" minIntegerDigits="2" /></td></td><td>${entry.comment}</td></tr>
+              <tr><td><g:formatDate format="yyyy-MM-dd" date="${entry.calendar.workDate}"/></td><td><g:link action="sudo" id="${entry.employee.id}" title="Sudo">${entry.employee.uid}</g:link></td><td>${(entry.delta<0) ? '-':'+'}<g:formatNumber number="${(int)(Math.abs(entry.delta/60))}" type="number" minIntegerDigits="2" />:<g:formatNumber number="${Math.abs(entry.delta)%60}" type="number" minIntegerDigits="2" /></td></td><td>${entry.comment}</td></tr>
             </g:each>
           </tbody>
         </table>

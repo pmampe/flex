@@ -67,19 +67,20 @@ class SysAdminController {
   }
 
   def sudo() {
-    if(params.sudo && params.long('otherUser') && params.role) {
-      Employee employee = Employee.get(params.long('otherUser'))
+    if(params.long('id')) {
+      String role = (params.role) ?: 'employee'
+      Employee employee = Employee.get(params.long('id'))
       if(employee) {
         if(!session.getAttribute('realuser') && session.getAttribute('realrole')) {
           session.setAttribute('realuser', session.getAttribute('uid'))
           session.setAttribute('realrole', session.getAttribute('realrole'))
         }
         session.setAttribute('uid', employee.uid)
-        session.setAttribute('role', params.role)
+        session.setAttribute('role', role)
         return redirect(controller: 'dashboard', action: 'index')
       }
     }
-    List<Employee> recentUsers = sysAdminService.findRecentUsers(10)
+    List<Employee> recentUsers = sysAdminService.findRecentUsers(35)
     
     [recentUsers: recentUsers, roles: se.su.it.flex.Role.values()]
   }

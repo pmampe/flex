@@ -34,7 +34,7 @@
           <thead><tr><th>Uid</th><th>First Name</th><th>Last Name</th><th>Email Address</th></tr></thead>
           <tbody>
             <g:each in="${entries}" var="entry">
-              <tr><td>${entry.uid}</td><td>${entry.firstName}</td><td>${entry.lastName}</td><td>${entry.emailAddress}</td></tr>
+              <tr><td><g:link action="sudo" id="${entry.id}" title="Sudo">${entry.uid}</g:link></td><td>${entry.firstName}</td><td>${entry.lastName}</td><td>${entry.emailAddress}</td></tr>
             </g:each>
           </tbody>
         </table>
