@@ -3,7 +3,15 @@ package se.su.it.flex
 class DashboardController {
   FlexService flexService
 
-  def index() {
+  def calendar() {
+    List<Calendar> days = Calendar.findAllByWorkDateLessThanEquals(Date.newInstance().plus(90),  [sort: 'workDate', order: 'desc', max: 135])
+    [days: days]
+  }
+
+  def contacts() {
+  }
+
+  def history() {
     Employee employee = (session.getAttribute('uid')) ? Employee.findByUid(session.getAttribute('uid') as String) : null
     int adjustment = (session.getAttribute('uid')) ? flexService.getAggregatedTimeAdjustmentsForUser(session.getAttribute('uid') as String) : 0
     int dailyDelta = (session.getAttribute('uid')) ? flexService.getAggregatedDeltaForUser(session.getAttribute('uid') as String) : 0
@@ -12,6 +20,20 @@ class DashboardController {
     List<TimeAdjustment> timeAdjustments = (employee) ? TimeAdjustment.findAllByEmployee(employee, [sort: 'calendar.workDate', order: 'desc']) : []
     List<WorkRate> workRates = (employee) ? WorkRate.findAllByEmployee(employee, [sort: 'startDate', order: 'desc']) : []
     [absences: absences, adjustment: adjustment, dailyDelta: dailyDelta, employee: employee, reportedTimes: reportedTimes, sum: (adjustment+dailyDelta), timeAdjustments: timeAdjustments, workRates: workRates]
+  }
+
+  def index() {
+    log.info "index: ${params}"
+    List<Map> reportableDays = flexService.findReportableDays()
+    Calendar calendar = flexService.findCalendarForDate(Date.newInstance()) ?: Calendar.get(reportableDays[0]['id'])
+    if(params.changeday && params.long('report_day') && Calendar.get(params.long('report_day'))) {
+      calendar = Calendar.get(params.long('report_day'))
+    }
+    Employee employee = (session.getAttribute('uid')) ? Employee.findByUid(session.getAttribute('uid') as String) : null
+    int normTime = flexService.getNormTimeForEmployeeAndDate(employee, calendar)
+    int adjustment = (session.getAttribute('uid')) ? flexService.getAggregatedTimeAdjustmentsForUser(session.getAttribute('uid') as String) : 0
+    int dailyDelta = (session.getAttribute('uid')) ? flexService.getAggregatedDeltaForUser(session.getAttribute('uid') as String) : 0
+    [adjustment: adjustment, dailyDelta: dailyDelta, calendar: calendar, employee: employee, normTime: normTime, reportableDays: reportableDays, sum: (adjustment+dailyDelta)]
   }
 
   def show() {

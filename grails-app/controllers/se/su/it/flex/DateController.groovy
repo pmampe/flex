@@ -27,7 +27,7 @@ class DateController {
     }
     String dayOfWeek = flexService.getWeekDay(calendar.workDate)
     List<Map> commonTimes = [[id: 0, name: 'Ledig (00:00)'], [id: 275, name: 'Halvdag (04:35)'], [id: 450, name: 'Sommartid (07:30)'], [id: 490, name: 'Normaltid (08:10)']]
-    [calendar: calendar, commonTimes: commonTimes, dayOfWeek: dayOfWeek, endTimes: [0, 14, 15, 16], startTimes: [0, 7, 8, 9, 10]]
+    [calendar: calendar, commonTimes: commonTimes, dayOfWeek: dayOfWeek, endTimes: [0, 12, 14, 15, 16], startTimes: [0, 8, 9, 10]]
   }
 
   def list() {

@@ -29,20 +29,26 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="https://flex.su.se/">Flex</a>
+            <a class="navbar-brand" href="https://flex.su.se/" title="flex">Flex</a>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Funktioner <span class="caret"></span></a>
                 <ul class="dropdown-menu">
+                  <li><g:link controller="dashboard" action="index" title="home">Dashboard</g:link></li>
+                  <li><g:link controller="dashboard" action="history" title="history">Historik</g:link></li>
+                  <li><g:link controller="dashboard" action="contacts" title="contacts">Kontakter</g:link></li>
+                  <li><g:link controller="dashboard" action="calendar" title="calendar">Kalender</g:link></li>
+                  <li role="separator" class="divider"></li>
                   <li><g:link controller="date" action="list" title="View Calendar">Calendar</g:link></li>
                   <li role="separator" class="divider"></li>
+                  <li><g:link controller="sysAdmin" action="index" title="sysadm">SysAdmin</g:link></li>
                   <li><g:link controller="sysAdmin" action="sudo" title="SuDo">Sudo</g:link></li>
                 </ul>
               </li>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Andra System <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Andra Länkar <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="https://hr.su.se/" title="primula">Primula</a></li>
                   <li><a href="http://www.su.se/medarbetare/" title="medarbetare">Medarbetarwebben</a></li>
@@ -60,5 +66,10 @@
         <g:layoutBody/>
       </div>
     </div>
+    <footer class="footer">
+      <div class="container">
+        <span class="text-muted"><address> Stockholms universitet, SE-106 91 Stockholm | Tfn: 08-16 20 00 | <a href="http://www.su.se/kontaktuppgifter/" title="Besöksadresser och fler kontaktuppgifter">Besöksadresser &amp; fler kontaktuppgifter</a></address></span>
+      </div>
+    </footer>
   </body>
 </html>

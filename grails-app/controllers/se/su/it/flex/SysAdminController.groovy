@@ -4,6 +4,10 @@ class SysAdminController {
   SysAdminService sysAdminService
  
   def index() {
+    int max = (params.int('maxsize')) ?: 100
+    List<Integer> maxSizes = [25, 100, 250, 1000]
+    List<Expando> entries = (params.find) ? sysAdminService.findInactiveFlexers(max): []
+    [entries: entries, max: max, maxSizes: maxSizes]
   }
 
   def listAbsence() {

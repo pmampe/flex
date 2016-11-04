@@ -56,26 +56,11 @@ class FlexService {
         cal.save(flush: true)
       }
     }
-    Calendar.findAllByWorkDateLike('%%-01-01').each { Calendar c ->
-      c.description = 'Nyårsdagen'
-      c.save(flush: true)
-    }
-    Calendar.findAllByWorkDateLike('%%-12-24').each { Calendar c ->
-      c.description = 'Julafton'
-      c.save(flush: true)
-    }
-    Calendar.findAllByWorkDateLike('%%-12-25').each { Calendar c ->
-      c.description = 'Juldagen'
-      c.save(flush: true)
-    }
-    Calendar.findAllByWorkDateLike('%%-12-26').each { Calendar c ->
-      c.description = 'Annandag jul'
-      c.save(flush: true)
-    }
-    Calendar.findAllByWorkDateLike('%%-12-31').each { Calendar c ->
-      c.description = 'Nyårsafton'
-      c.save(flush: true)
-    }
+  }
+
+  @Transactional(readOnly = true)
+  public Calendar findCalendarForDate(Date someDate) {
+    return ((someDate) ? Calendar.findByWorkDate(Date.parse('yyyy-MM-dd', someDate.format('yyyy-MM-dd'))): null)
   }
 
   @Transactional(readOnly = true)
@@ -88,7 +73,7 @@ class FlexService {
         latestYear = row['year'] as int
       }
     } catch(Throwable exception) {
-      log.error "Some problems: ${exception.getMessage()}"
+      log.error "Some problems: ${exception.getMessage()}",exception
     } finally {
       if(null!=sql) {
         try {
@@ -102,6 +87,29 @@ class FlexService {
   }
 
   @Transactional(readOnly = true)
+  public List<Map> findReportableDays() {
+    List<Map> days = []
+    Sql sql = null
+    try {
+      sql = new Sql(dataSource)
+      sql.rows("select id, work_date from calendar where work_date<=now() and full_time>0 ORDER by work_date desc limit 30;").each { row ->
+        days << [id: row['id'] as long, name: (row['work_date'] as Date).format('yyyy-MM-dd')]
+      }
+    } catch(Throwable exception) {
+      log.error "Some problems: ${exception.getMessage()}",exception
+    } finally {
+      if(null!=sql) {
+        try {
+          sql.close()
+        } catch(Throwable exception) {
+        }
+        sql = null
+      }
+    }
+    return days
+  }
+
+  @Transactional(readOnly = true)
   public List<Integer> findUniqueYears() {
     Sql sql = null
     List<Integer> years = []
@@ -111,7 +119,7 @@ class FlexService {
         years << row['year']
       }
     } catch(Throwable exception) {
-      log.error "Some problems: ${exception.getMessage()}"
+      log.error "Some problems: ${exception.getMessage()}",exception
     } finally {
       if(null!=sql) {
         try {
@@ -134,7 +142,7 @@ class FlexService {
         flexsaldo = row['flexsaldo'] as int
       }
     } catch(Throwable exception) {
-      log.error "Some problems: ${exception.getMessage()}"
+      log.error "Some problems: ${exception.getMessage()}",exception
     } finally {
       if(null!=sql) {
         try {
@@ -154,10 +162,10 @@ class FlexService {
     try {
       sql = new Sql(dataSource)
       sql.rows([uid: uid],"select sum(t.delta) as saldo from time_adjustment t inner join employee e on e.id=t.employee_id where e.uid=:uid;").each { row ->
-        flexsaldo = row['saldo'] as int
+        flexsaldo = (row['saldo']) ? (Integer.parseInt(row['saldo']) ?: 0) : 0
       }
     } catch(Throwable exception) {
-      log.error "Some problems: ${exception.getMessage()}"
+      log.error "Some problems: ${exception.getMessage()}",exception
     } finally {
       if(null!=sql) {
         try {
@@ -195,7 +203,7 @@ class FlexService {
             r = workRate.rateFriday
           }
         }
-        normTime = (rate * normTime) / 10000
+        normTime = (r * normTime) / 10000
       }
     }
     return normTime

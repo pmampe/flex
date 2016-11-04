@@ -11,6 +11,29 @@ class SysAdminService {
   DataSource dataSource
 
   @Transactional(readOnly = true)
+  public List<Expando> findInactiveFlexers(int limit) {
+    Sql sql = null
+    List<Expando> inactiveFlexers = []
+    try {
+      sql = new Sql(dataSource)
+      sql.rows("select max(c.work_date) as lastreport, e.uid, e.id from employee e inner join reported_time r on e.id=r.employee_id inner join calendar c on c.id=r.calendar_id  group by e.uid order by lastreport asc limit ${(limit>0)? limit : 100};").each { row ->
+        inactiveFlexers << Expando.newInstance(lastDate: row['lastreport'], employee: Employee.get(row['id'] as long))
+      }
+    } catch(Throwable exception) {
+      log.error "Some problems: ${exception.getMessage()}"
+    } finally {
+      if(null!=sql) {
+        try {
+          sql.close()
+        } catch(Throwable exception) {
+        }
+        sql = null
+      }
+    }
+    return inactiveFlexers
+  }
+
+  @Transactional(readOnly = true)
   public List<Employee> findRecentUsers(int numberOfDays) {
     List<Employee> recentUsers = []
     Sql sql = null
