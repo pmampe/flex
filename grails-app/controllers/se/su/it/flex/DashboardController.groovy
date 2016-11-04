@@ -23,17 +23,18 @@ class DashboardController {
   }
 
   def index() {
-    log.info "index: ${params}"
     List<Map> reportableDays = flexService.findReportableDays()
     Calendar calendar = flexService.findCalendarForDate(Date.newInstance()) ?: Calendar.get(reportableDays[0]['id'])
     if(params.changeday && params.long('report_day') && Calendar.get(params.long('report_day'))) {
       calendar = Calendar.get(params.long('report_day'))
     }
     Employee employee = (session.getAttribute('uid')) ? Employee.findByUid(session.getAttribute('uid') as String) : null
+    ReportedTime reportedTime = ReportedTime.findByEmployeeAndCalendar(employee, calendar)
     int normTime = flexService.getNormTimeForEmployeeAndDate(employee, calendar)
     int adjustment = (session.getAttribute('uid')) ? flexService.getAggregatedTimeAdjustmentsForUser(session.getAttribute('uid') as String) : 0
     int dailyDelta = (session.getAttribute('uid')) ? flexService.getAggregatedDeltaForUser(session.getAttribute('uid') as String) : 0
-    [adjustment: adjustment, dailyDelta: dailyDelta, calendar: calendar, employee: employee, normTime: normTime, reportableDays: reportableDays, sum: (adjustment+dailyDelta)]
+    log.info "hoho: "+reportedTime
+    [adjustment: adjustment, dailyDelta: dailyDelta, calendar: calendar, employee: employee, normTime: normTime, reportableDays: reportableDays, reportedTime: reportedTime, sum: (adjustment+dailyDelta)]
   }
 
   def show() {

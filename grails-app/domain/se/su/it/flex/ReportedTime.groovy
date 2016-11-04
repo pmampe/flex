@@ -20,4 +20,12 @@ class ReportedTime {
     employee(nullable: false, unique: ['calendar'])
     lastUpdated(nullable: false)
   }
+
+  public String getFormattedEndTime() {
+    return "${(endMinute<600)?'0':''}${(int)(endMinute/60)}:${(endMinute%60<10)?'0':''}${(int)(endMinute%60)}"
+  }
+
+  public String getFormattedStartTime() {
+    return "${(startMinute<600)?'0':''}${(int)(startMinute/60)}:${(startMinute%60<10)?'0':''}${(int)(startMinute%60)}"
+  }
 }

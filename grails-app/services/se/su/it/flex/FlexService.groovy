@@ -162,7 +162,7 @@ class FlexService {
     try {
       sql = new Sql(dataSource)
       sql.rows([uid: uid],"select sum(t.delta) as saldo from time_adjustment t inner join employee e on e.id=t.employee_id where e.uid=:uid;").each { row ->
-        flexsaldo = (row['saldo']) ? (Integer.parseInt(row['saldo']) ?: 0) : 0
+        flexsaldo = (row['saldo']) ? (row['saldo']) : 0
       }
     } catch(Throwable exception) {
       log.error "Some problems: ${exception.getMessage()}",exception

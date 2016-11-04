@@ -28,6 +28,28 @@
         <br/><br/>
         Rapporteringsdag: <strong><g:formatDate date="${calendar?.workDate}" format="yyyy-MM-dd"/></strong><br/>
         Normtid: <strong><g:formatNumber number="${(int)(normTime/60)}" type="number" minIntegerDigits="2" />:<g:formatNumber number="${normTime%60}" type="number" minIntegerDigits="2" /></strong><br/>
+
+        <g:form name="timeform" action="index" class="form-horizontal">
+          <div id="feedbackmessage" style="color:red"></div>
+          <div class="form-group">
+            <label for="starttime" class="control-label">Kom (HH:MM)</label>
+            <g:textField name="starttime" value="${(reportedTime?.getFormattedStartTime())?: '00:00'}" maxlength="5"/>
+          </div>
+
+          <div class="form-group">
+            <label for="lunchlength" class="control-label">Lunch (minuter)</label>
+            <g:textField name="lunchlength" value="${(reportedTime?.lunchLength)?: '30'}" maxlength="3"/>
+          </div>
+
+          <div class="form-group">
+            <label for="endtime" class="control-label">Gick (HH:MM)</label>
+            <g:textField name="endtime" value="${(reportedTime?.getFormattedEndTime())?: '00:00'}" maxlength="5"/>
+          </div>
+
+          <div class="form-group">
+            <g:submitButton name="find" value="Find" class="btn btn-default" />
+          </div>
+        </g:form>
       </g:if>  
     </div>
   </body>
