@@ -32,7 +32,7 @@ if(Environment.isDevelopmentMode() || Environment.currentEnvironment == Environm
   root(ERROR, ['TIME_BASED_FILE'])
   logger("org.grails.web.errors", DEBUG, ['TIME_BASED_FILE'], false)
   logger("grails", INFO, ['TIME_BASED_FILE'], false)
-  logger("se.su.it.vfu", INFO, ['TIME_BASED_FILE'], false)
+  logger("se.su.it.flex", INFO, ['TIME_BASED_FILE'], false)
   println("### Finished setting up logback for production mode ###")
 }
 

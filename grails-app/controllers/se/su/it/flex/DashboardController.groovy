@@ -23,17 +23,35 @@ class DashboardController {
   }
 
   def index() {
+    log.info "index: ${params}"
     List<Map> reportableDays = flexService.findReportableDays()
-    Calendar calendar = flexService.findCalendarForDate(Date.newInstance()) ?: Calendar.get(reportableDays[0]['id'])
-    if(params.changeday && params.long('report_day') && Calendar.get(params.long('report_day'))) {
+    Calendar calendar = null
+    if(params.long('report_day') && Calendar.get(params.long('report_day'))) {
       calendar = Calendar.get(params.long('report_day'))
+    } else if(params.long('save_report_day') && Calendar.get(params.long('save_report_day'))) {
+      calendar = Calendar.get(params.long('save_report_day'))
+    }
+    if(!calendar) {
+      calendar = flexService.findCalendarForDate(Date.newInstance()) 
+      if(!calendar || !reportableDays.collect {it.id}.contains(calendar.id)) {
+        calendar = Calendar.get(reportableDays[0].id)
+      }
     }
     Employee employee = (session.getAttribute('uid')) ? Employee.findByUid(session.getAttribute('uid') as String) : null
-    ReportedTime reportedTime = ReportedTime.findByEmployeeAndCalendar(employee, calendar)
     int normTime = flexService.getNormTimeForEmployeeAndDate(employee, calendar)
+    if(params.saveBasics) {
+      boolean absentAllDay = params.boolean('absentAllDay')
+      List<String> startParts = params.starttime?.split(":")
+      int startmin = (startParts) ? (60 * Integer.parseInt(startParts[0])+Integer.parseInt(startParts[1])) : 0
+      List<String> endParts = params.endtime?.split(":")
+      int endmin = (endParts) ? (60 * Integer.parseInt(endParts[0])+Integer.parseInt(endParts[1])) : 0
+      int lunchlength = params.int('lunchlength') ?: 0 
+      String comment = params.commentBasic?.trim()
+      flexService.updateReportedTimeForEmployee(employee, calendar, startmin, endmin, lunchlength, absentAllDay, comment)
+    }
+    ReportedTime reportedTime = ReportedTime.findByEmployeeAndCalendar(employee, calendar)
     int adjustment = (session.getAttribute('uid')) ? flexService.getAggregatedTimeAdjustmentsForUser(session.getAttribute('uid') as String) : 0
     int dailyDelta = (session.getAttribute('uid')) ? flexService.getAggregatedDeltaForUser(session.getAttribute('uid') as String) : 0
-    log.info "hoho: "+reportedTime
     [adjustment: adjustment, dailyDelta: dailyDelta, calendar: calendar, employee: employee, normTime: normTime, reportableDays: reportableDays, reportedTime: reportedTime, sum: (adjustment+dailyDelta)]
   }
 

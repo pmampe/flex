@@ -223,4 +223,28 @@ class FlexService {
     weekDays.put(java.util.Calendar.SUNDAY, "Söndag")
     return weekDays.get(inst.get(java.util.Calendar.DAY_OF_WEEK))
   }
+
+  @Transactional
+  public void updateReportedTimeForEmployee(Employee employee, Calendar calendar, int startmin, int endmin, int lunchlength, boolean absentAllDay, String comment) {
+    ReportedTime reportedTime = ReportedTime.findByCalendarAndEmployee(calendar, employee, [max: 1])
+    if(!reportedTime) {
+      reportedTime = ReportedTime.newInstance()
+      reportedTime.calendar = calendar
+      reportedTime.employee = employee
+      reportedTime.dateCreated = Date.newInstance()
+    }
+    reportedTime.lastUpdated = Date.newInstance()
+    reportedTime.absentAllDay = absentAllDay
+    reportedTime.comment = comment
+    if(absentAllDay) {
+      reportedTime.lunchLength = 0
+      reportedTime.startMinute = 0
+      reportedTime.endMinute = 0
+    } else {
+      reportedTime.lunchLength = lunchlength
+      reportedTime.startMinute = startmin
+      reportedTime.endMinute = endmin
+    }
+    reportedTime.save(flush: true, failOnError: true)
+  }
 }

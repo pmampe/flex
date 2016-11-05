@@ -71,7 +71,31 @@ var dashboardIndexModule = (function($) {
       }
       return true;
     });
-    console.log('dashboardIndexModule.initModule: setting up js stuff ...');
+    $('input#absentAllDay').on('click', function(event) {
+      var absentAllDay = $('input#absentAllDay').is(':checked');
+      if(absentAllDay) {
+        $("input#lunchlength").val("0");
+        $("input#endtime").val("00:00")
+        $("input#starttime").val("00:00")
+        $("input#lunchlength").attr('disabled', true);
+        $("input#endtime").attr('disabled', true);
+        $("input#starttime").attr('disabled', true);
+      } else {
+        $("input#lunchlength").val(30);
+        $("input#lunchlength").attr('disabled', false);
+        $("input#endtime").attr('disabled', false);
+        $("input#starttime").attr('disabled', false);
+      }
+    });
+    var absentAllDay = $('input#absentAllDay').is(':checked');
+    if(absentAllDay) {
+      $("input#lunchlength").val("0");
+      $("input#endtime").val("00:00")
+      $("input#starttime").val("00:00")
+      $("input#lunchlength").attr('disabled', true);
+      $("input#endtime").attr('disabled', true);
+      $("input#starttime").attr('disabled', true);
+    }    
   };
 
   return {initModule: initModule};
