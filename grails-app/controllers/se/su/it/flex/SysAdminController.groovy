@@ -46,7 +46,7 @@ class SysAdminController {
     List<String> sortOrders = ["asc", "desc"]
     int max = (params.int('maxsize')) ?: 100
     String sort = (params.sortby?.trim()) ?: "calendar.workDate"
-    String order = (params.sortorder?.trim()) ?: "asc"
+    String order = (params.sortorder?.trim()) ?: "desc"
     [entries: ReportedTime.findAll([max: max, sort: sort, order: order]), max: max, maxSizes: maxSizes, order: order, sort: sort, sortables: sortables, sortOrders: sortOrders]
   }
 
